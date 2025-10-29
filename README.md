@@ -5,9 +5,9 @@ Dieses Repository enthält SAS-Codes und Excel-Daten zur Analyse von Verkaufs- u
 ## Projektinhalt
 
 - **Excel-Dateien**:
-  - `sales_clean.xlsx` – Bereinigte Verkaufsdaten
-  - `production_clean.xlsx` – Bereinigte Produktionsdaten
-  - `customers_clean.xlsx` – Bereinigte Kundendaten
+  - `sales.xlsx` –  Verkaufsdaten
+  - `production.xlsx` –  Produktionsdaten
+  - `customers.xlsx` –  Kundendaten
 
 - **SAS-Codes**:
   - `daily_sales_summary.sas` – Erstellung täglicher Verkaufsübersichten
