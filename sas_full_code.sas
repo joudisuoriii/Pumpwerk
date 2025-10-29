@@ -1,5 +1,5 @@
 
-/* ---  Import Files --- */
+/* ---  Dateien importieren --- */
 filename prod '/home/u64348240/production.xlsx';
 filename sale '/home/u64348240/sales.xlsx';
 filename cust '/home/u64348240/customers.xlsx';
@@ -44,7 +44,7 @@ data work.customers_clean;
     DaysSinceLastPurchase = today() - LastPurchaseDate;
 run;
 
-/* ---  Daily Sales Summary --- */
+/* ---  Tägliche Verkaufsübersicht --- */
 proc sql;
     create table daily_sales_summary as
     select Date, Region, CustomerID, sum(Revenue) as DailyRevenue, sum(UnitsSold) as DailyUnitsSold
@@ -52,7 +52,7 @@ proc sql;
     group by Date, Region, CustomerID;
 quit;
 
-/* --- Prepare Heatmap Data --- */
+/* --- Daten für Heatmap vorbereiten --- */
 proc sql;
     create table heatmap_data as
     select a.Region, b.MachineGroup, sum(a.DailyRevenue) as TotalRevenue, mean(b.UptimePct) as AvgUptime
@@ -60,7 +60,7 @@ proc sql;
     group by a.Region, b.MachineGroup;
 quit;
 
-/* --- Heatmaps Visualization --- */
+/* --- Heatmap-Visualisierung --- */
 proc sgplot data=heatmap_data;
     heatmap x=MachineGroup y=Region / colorresponse=TotalRevenue colormodel=(lightblue blue green yellow orange red);
     gradlegend / title="Total Revenue";
@@ -73,7 +73,7 @@ proc sgplot data=heatmap_data;
     title "Heatmap of Machine Uptime per Machine Group & Region";
 run;
 
-/* --- Dashboard Summary --- */
+/* --- Dashboard Übersicht --- */
 proc sql;
     create table dashboard as
     select a.Region, sum(a.DailyRevenue) as TotalRevenue, mean(b.Output) as AvgOutput, mean(b.UptimePct) as AvgUptime, mean(c.TotalSpend) as AvgCustomerSpend
@@ -82,7 +82,7 @@ proc sql;
     group by a.Region;
 quit;
 
-/* --- Dashboard Visualization --- */
+/* --- Dashboard Visualisierung --- */
 proc sgplot data=dashboard; vbar Region / response=TotalRevenue datalabel datalabelattrs=(weight=bold) fillattrs=(color=lightblue); xaxis label="Region"; yaxis label="Total Revenue"; title "Total Revenue by Region"; run;
 proc sgplot data=dashboard; vbar Region / response=AvgOutput datalabel datalabelattrs=(weight=bold) fillattrs=(color=orange); xaxis label="Region"; yaxis label="Average Output (units)"; title "Average Output by Region"; run;
 proc sgplot data=dashboard; vbar Region / response=AvgUptime datalabel datalabelattrs=(weight=bold) fillattrs=(color=yellow); xaxis label="Region"; yaxis label="Average Uptime %"; title "Average Uptime by Region"; run;
